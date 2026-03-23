@@ -18,11 +18,31 @@
         {{form.hidden_tag()}}
         {{form.student_name.label}}{{form.student_name()}}
         {{form.student_age.label}}{{form.student_age()}}
-        {{form.email.label}}{{form.email()}}
+
 
         <input type="submit" value="Register">
 
     </form>
+
+    <table border="2">
+
+        <thead>
+            <td>ID</td>
+            <td>NAME</td>
+            <td>AGE</td>
+        </thead>
+
+        <tbody>
+            {% for student in details %}
+            <tr>
+                <td>{{student.stud_id}}</td>
+                <td>{{student.stud_name}}</td>
+                <td>{{student.stud_age}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
 
 
 </body>
