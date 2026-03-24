@@ -1,4 +1,18 @@
 {% extends 'main.html' %}
 {% block title %} signup Page {% endblock %}
 
-{% block content %} signup Form {% endblock %}
+
+
+
+
+{% block content %} signup Form 
+<form method="post">
+    {{form.hidden_tag()}}
+    {{form.user_name.label}}{{form.user_name()}}
+    {{form.password.label}}{{form.password()}}
+    
+    <input type="submit" value="Register">
+    
+    </form>
+
+{% endblock %}

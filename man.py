@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for,render_template
+from flask import Flask, request, redirect, url_for,render_template, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, PasswordField, EmailField
@@ -64,6 +64,15 @@ def load_user(user_id):
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = UserForm()
+
+    if form.validate_on_submit():
+        pwdhash = bcrypt.generate_password_hash(form.password.data)
+        entry = User(user_name=form.user_name.data, password=pwdhash)
+        db.session.add(entry)
+        db.session.commit()
+
+        return redirect(url_for('login'))
+
     return render_template('signup.html', form=form)
 
 
@@ -71,7 +80,28 @@ def signup():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+
+    try:
+        if form.validate_on_submit():
+
+            user = User.query.filter_by(user_name=form.user_name.data).first()
+            if user and bcrypt.check_password_hash(user.password, form.password.data):
+                login_user(user)
+                flash('Login Successful')
+                return redirect(url_for('dashboard'))
+
+    except:
+        flash('Invalid Credentials')
+    
     return render_template('login.html', form=form)
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
+
 
 @app.route('/dashboard')
 @login_required

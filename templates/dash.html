@@ -1,4 +1,8 @@
 {% extends 'main.html' %}
 {% block title %} Dashboard Page {% endblock %}
 
-{% block content %} Dashboard Form {% endblock %}
+{% block content %} Dashboard Form 
+
+<a href="{{url_for('logout')}}">logout</a>
+
+{% endblock %}
